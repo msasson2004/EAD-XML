@@ -43,6 +43,8 @@ public class App
 
 	    try 
 	    {	
+	    	String name;
+			SubjectTerms st;
 	    	Mappings map = new Mappings(table_mappings);
 	    	HashMap<String, SubjectTerms> hash = map.build();
 	    	SAXBuilder saxBuilder = new SAXBuilder();
@@ -61,59 +63,59 @@ public class App
 			        	if(did != null) {
 			        		Element origin = getChild(did, "origination");
 			        		if(origin != null) {
-			        			String name = origin.getText();
-			        			SubjectTerms st = hash.get(name);
+			        			name = origin.getText();
+			        			st = hash.get(name);
 			        			if(st != null) {
 				        			System.out.println("Found subject: " + st.Subject + " index: " + st.Index + " term: " + st.Term);
 				        			// set the authfilenumber attribute of origination
 				        			origin.setAttribute("authfilenumber", st.Index);
 				        			origin.setAttribute("source", st.Term);
-				        			// find controlaccess tag
-				        			List<Element> list = arch.getChildren();
-				        			for(int j=0;j<list.size();j++) 
-				        			{
-				        				Element ctrlAccess = list.get(j);
-					        	        if(ctrlAccess != null && ctrlAccess.getName() == "controlaccess") 
-					        	        {
-					        	        	List<Element> children = ctrlAccess.getChildren();
-					        	        	for(int k=0;k<children.size();k++) 
-					        	        	{			
-					        	        		Element elem = children.get(k);
-					        	        		if(elem.getName() == "subject") {
-					        	        			name = elem.getText();
-					        	        			st = hash.get(name);
-					        	        			if(st != null) {
-					        	        				elem.setAttribute("authfilenumber", st.Index);
-					        	        				elem.setAttribute("source", st.Term);					        	        				
-					        	        			}
-					        	        		}
-					        	        		else if(elem.getName() == "geogname") {
-					        	        			name = elem.getText();
-					        	        			st = hash.get(name);
-					        	        			if(st != null) {
-					        	        				elem.setAttribute("authfilenumber", st.Index);
-					        	        				elem.setAttribute("source", st.Term);					        	        				
-					        	        			}
-					        	        		}
-					        	        		if(elem.getName() == "corpname") {
-					        	        			name = elem.getText();
-					        	        			st = hash.get(name);
-					        	        			if(st != null) {
-					        	        				elem.setAttribute("authfilenumber", st.Index);
-					        	        				elem.setAttribute("source", st.Term);					        	        				
-					        	        			}
-					        	        		}
-					        	        	}
-					        	        }
-				        			}
-				        	// 		write the xml file   
-				        			System.out.println("writing xml file");
-				        			XMLOutputter xmlOutput = new XMLOutputter();
-				        	        xmlOutput.setFormat(Format.getPrettyFormat());
-				        	        xmlOutput.output(document, new FileOutputStream(result_file)); 
 			        			}
 			        		}
 			        	}
+	        			List<Element> list = arch.getChildren();
+	        			// find controlaccess tag
+	        			for(int j=0;j<list.size();j++) 
+	        			{
+	        				Element ctrlAccess = list.get(j);
+		        	        if(ctrlAccess != null && ctrlAccess.getName() == "controlaccess") 
+		        	        {
+		        	        	List<Element> children = ctrlAccess.getChildren();
+		        	        	for(int k=0;k<children.size();k++) 
+		        	        	{			
+		        	        		Element elem = children.get(k);
+		        	        		if(elem.getName() == "subject") {
+		        	        			name = elem.getText();
+		        	        			st = hash.get(name);
+		        	        			if(st != null) {
+		        	        				elem.setAttribute("authfilenumber", st.Index);
+		        	        				elem.setAttribute("source", st.Term);					        	        				
+		        	        			}
+		        	        		}
+		        	        		else if(elem.getName() == "geogname") {
+		        	        			name = elem.getText();
+		        	        			st = hash.get(name);
+		        	        			if(st != null) {
+		        	        				elem.setAttribute("authfilenumber", st.Index);
+		        	        				elem.setAttribute("source", st.Term);					        	        				
+		        	        			}
+		        	        		}
+		        	        		if(elem.getName() == "corpname") {
+		        	        			name = elem.getText();
+		        	        			st = hash.get(name);
+		        	        			if(st != null) {
+		        	        				elem.setAttribute("authfilenumber", st.Index);
+		        	        				elem.setAttribute("source", st.Term);					        	        				
+		        	        			}
+		        	        		}
+		        	        	}
+		        	        }
+	        			}
+			        	// 		write the xml file   
+	        			System.out.println("writing xml file");
+	        			XMLOutputter xmlOutput = new XMLOutputter();
+	        	        xmlOutput.setFormat(Format.getPrettyFormat());
+	        	        xmlOutput.output(document, new FileOutputStream(result_file)); 
 			        }
 	    		}
 	    	}
