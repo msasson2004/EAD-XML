@@ -14,13 +14,13 @@ public class App
 {
     public static void main( String[] args )
     {
-    	String table_mappings, folder_input, result_file;
+    	String table_mappings, folder_input, result_file, out_folder;
     	File[] listOfFiles;
 
     	if(args.length > 1) {
     		folder_input = args[0];
         	table_mappings = args[1];
-        	String out_folder = folder_input + "_result";
+        	out_folder = folder_input + "_result";
         	File theDir = new File(out_folder);
         	
         	try 
@@ -34,7 +34,6 @@ public class App
         		System.out.println(e.getMessage());
         		return;
         	}
-        	result_file = out_folder + "/" + args[2];        	
     	}
     	else {
     		System.out.println("Syntax: java App.class <mapping file> <input dir>");
@@ -50,8 +49,10 @@ public class App
 	    	for(int i=0;i < listOfFiles.length;i++) 
 	    	{
 	    		if (listOfFiles[i].isFile()) 
-	    		{	    	        
-			        System.out.println("working on: " + listOfFiles[i].getName());
+	    		{	   
+	                String file_name = listOfFiles[i].getName();
+	            	result_file = out_folder + "/" + file_name;        	
+			        System.out.println("working on: " + file_name);
 			        Document document = saxBuilder.build(listOfFiles[i]);
 			        Element root = document.getRootElement();
 			        Element arch = getChild(root, "archdesc");
